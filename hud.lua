@@ -112,7 +112,7 @@ local function on_paint_hud(ctx)
     end
 
     ----bottom left hp armor
-    draw_container(ctx, -10, scrsize_y-45, scrsize_x + 20, 55)
+    draw_container(ctx, -10, scrsize_y-45, 200, 55)
 
     if health >= 0 and health <= 100 then
         client_draw_text(ctx, 10, scrsize_y-33, 141, 162, 33, 255, "+", 0, health)
@@ -136,9 +136,8 @@ local function on_paint_hud(ctx)
     end
         
 	if is_warmup == 0 then
+		draw_container(ctx, scrsize_x / 2 - 150, scrsize_y-45, 300, 55)
 		draw_container(ctx, scrsize_x / 2 - 50, scrsize_y-45, 100, 55)
-		ctwins = "CT - " .. ctwins
-		twins = "T - " .. twins
         client_draw_text(ctx, scrsize_x / 2 - 100, scrsize_y-20, 255, 255, 255, 255, "c+", 0, ctwins)
         client_draw_text(ctx, scrsize_x / 2 + 100, scrsize_y-20, 255, 255, 255, 255, "c+", 0, twins)
 		if countdown == true then
