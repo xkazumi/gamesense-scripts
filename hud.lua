@@ -88,10 +88,17 @@ local function on_paint_hud(ctx)
     local ctwins = entity_get_prop(counterterrorist,"m_scoreTotal")
     local twins = entity_get_prop(terrorist,"m_scoreTotal")
 	
+    local is_warmup = entity_get_prop(gamerulesproxy,"m_bWarmupPeriod")
     local roundtime = entity_get_prop(gamerulesproxy,"m_iRoundTime")
 	local curtime = globals_curtime()
 	local starttime = entity_get_prop(gamerulesproxy,"m_fRoundStartTime")
+	
 	local timeleft = (starttime + roundtime) - curtime
+	local countdown = false
+	if starttime > curtime then
+		countdown = true
+		timeleft = starttime - curtime
+	end
 	timeleft = timeleft + 1
 	local timer = string.format("%.2d:%.2d", timeleft/60%60, timeleft%60)
 	
@@ -105,7 +112,7 @@ local function on_paint_hud(ctx)
     end
 
     ----bottom left hp armor
-    draw_container(ctx, -10, scrsize_y-45, 500, 55)
+    draw_container(ctx, -10, scrsize_y-45, 200, 55)
 
     if health >= 0 and health <= 100 then
         client_draw_text(ctx, 10, scrsize_y-33, 141, 162, 33, 255, "+", 0, health)
@@ -130,17 +137,18 @@ local function on_paint_hud(ctx)
         
 		
 	
-    draw_container(ctx, scrsize_x / 2 - 150, 0, 300, 55)
-    draw_container(ctx, scrsize_x / 2 - 50, 0, 100, 55)
-
-        client_draw_text(ctx, scrsize_x / 2 - 90, 13, 255, 255, 255, 255, "+", 0, "CT")
-		ctwins = ctwins .. " wins"
-		twins = twins .. " wins"
-        client_draw_text(ctx, scrsize_x / 2 - 130, 18, 255, 255, 255, 255, "", 0, ctwins)
-        client_draw_text(ctx, scrsize_x / 2 + 80, 18, 255, 255, 255, 255, "", 0, twins)
-        client_draw_text(ctx, scrsize_x / 2 + 60, 13, 255, 255, 255, 255, "+", 0, "T")
-        client_draw_text(ctx, scrsize_x / 2, 25, 255, 255, 255, 255, "c+", 0, timer)
-		
+	if is_warmup == 0 then
+		draw_container(ctx, scrsize_x / 2 - 150, scrsize_y-45, 300, 55)
+		draw_container(ctx, scrsize_x / 2 - 50, scrsize_y-45, 100, 55)
+        client_draw_text(ctx, scrsize_x / 2 - 100, scrsize_y-20, 255, 255, 255, 255, "c+", 0, ctwins)
+        client_draw_text(ctx, scrsize_x / 2 + 100, scrsize_y-20, 255, 255, 255, 255, "c+", 0, twins)
+		if countdown == true then
+			client_draw_text(ctx, scrsize_x / 2, scrsize_y-20, 255, 0, 0, 255, "c+", 0, timer)
+		end
+		 if countdown == false then
+			client_draw_text(ctx, scrsize_x / 2, scrsize_y-20, 255, 255, 255, 255, "c+", 0, timer)
+		end
+	end
 		
 		
 end
